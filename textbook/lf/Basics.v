@@ -485,10 +485,10 @@ Module Playground.
   Definition b : rgb := blue.
 End Playground.
 
-Definition b : bool := true.
+Definition b0 : bool := true.
 
 Check Playground.b : rgb.
-Check b : bool.
+Check b0 : bool.
 
 (* ================================================================= *)
 (** ** Tuples *)
@@ -1446,10 +1446,6 @@ Fixpoint plus' (n : nat) (m : nat) : nat :=
     out your solution so that it doesn't cause Coq to reject the whole
     file!) *)
 
-(* FILL IN HERE
-
-    [] *)
-
 (* ################################################################# *)
 (** * More Exercises *)
 
@@ -1477,7 +1473,19 @@ Qed.
     to the previous one but where the second hypothesis says that the
     function [f] has the property that [f x = negb x]. *)
 
-(* FILL IN HERE *)
+Theorem negation_fn_applied_twice : 
+  forall (f: bool -> bool),
+  (forall (x: bool), f x = negb x) ->
+  forall (b: bool), f (f b) = b.
+Proof.
+  intros f H [].
+  - rewrite -> H.
+    rewrite -> H.
+    reflexivity.
+  - rewrite -> H.
+    rewrite -> H.
+    reflexivity.
+Qed.
 
 (* Do not modify the following line: *)
 Definition manual_grade_for_negation_fn_applied_twice : option (nat*string) := None.
@@ -1497,8 +1505,14 @@ Theorem andb_eq_orb :
   (andb b c = orb b c) ->
   b = c.
 Proof.
-  (* FILL IN HERE *) Admitted.
-
+  intros [] c.
+  - simpl. intros H. 
+    rewrite -> H.
+    reflexivity.
+  - simpl. intros H.
+    rewrite <- H.
+    reflexivity.
+Qed.
 (** [] *)
 
 (** **** Exercise: 3 stars, standard (binary)
@@ -1536,11 +1550,21 @@ Inductive bin : Type :=
     for binary numbers, and a function [bin_to_nat] to convert
     binary numbers to unary numbers. *)
 
-Fixpoint incr (m:bin) : bin
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+Fixpoint incr (m:bin) : bin :=
+  match m with
+  | Z => B1 Z
+  | B0 n => B1 n
+  | B1 n => B0 (incr n)
+  end.
 
-Fixpoint bin_to_nat (m:bin) : nat
-  (* REPLACE THIS LINE WITH ":= _your_definition_ ." *). Admitted.
+
+Fixpoint bin_to_nat (m:bin) : nat :=
+  match m with
+  | Z => 0
+  | B1 Z => 1
+  | B0 b => 2 * (bin_to_nat b)
+  | B1 b => 2 * (bin_to_nat b) + 1
+  end.
 
 (** The following "unit tests" of your increment and binary-to-unary
     functions should pass after you have defined those functions correctly.
@@ -1549,24 +1573,25 @@ Fixpoint bin_to_nat (m:bin) : nat
     next chapter. *)
 
 Example test_bin_incr1 : (incr (B1 Z)) = B0 (B1 Z).
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_bin_incr2 : (incr (B0 (B1 Z))) = B1 (B1 Z).
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_bin_incr3 : (incr (B1 (B1 Z))) = B0 (B0 (B1 Z)).
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
 
 Example test_bin_incr4 : bin_to_nat (B0 (B1 Z)) = 2.
-(* FILL IN HERE *) Admitted.
+Proof. reflexivity. Qed.
+
 
 Example test_bin_incr5 :
-        bin_to_nat (incr (B1 Z)) = 1 + bin_to_nat (B1 Z).
-(* FILL IN HERE *) Admitted.
+  bin_to_nat (incr (B1 Z)) = 1 + bin_to_nat (B1 Z).
+  Proof. reflexivity. Qed.
 
 Example test_bin_incr6 :
-        bin_to_nat (incr (incr (B1 Z))) = 2 + bin_to_nat (B1 Z).
-(* FILL IN HERE *) Admitted.
+  bin_to_nat (incr (incr (B1 Z))) = 2 + bin_to_nat (B1 Z).
+  Proof. reflexivity. Qed.
 
 (** [] *)
 
