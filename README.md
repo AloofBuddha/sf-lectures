@@ -1,8 +1,12 @@
-# Lectures on Software Foundations
+# Software Foundations
+
+## Progress
+
+- [My Own self-study notes](./self-study-notebook/README.md)
+
+## MRC
 
 **By [Michael Clarkson][mrc].**
-
-
 
 This repo contains materials to accompany a series of [YouTube videos][yt] on
 the textbook [*Software Foundations*][sf], volume 1. The videos grew out CS 4160
